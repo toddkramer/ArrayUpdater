@@ -1,0 +1,41 @@
+language: objective-c
+osx_image: xcode8.1
+env:
+  global:
+  - PROJECT=ArrayUpdater.xcodeproj
+  - IOS_FRAMEWORK_SCHEME="ArrayUpdaterMobile"
+  - MACOS_FRAMEWORK_SCHEME="ArrayUpdaterMac"
+  - TVOS_FRAMEWORK_SCHEME="ArrayUpdaterTV"
+  - WATCHOS_FRAMEWORK_SCHEME="ArrayUpdaterWatch"
+  - IOS_SDK=iphonesimulator10.1
+  - MACOS_SDK=macosx10.12
+  - TVOS_SDK=appletvsimulator10.0
+  - WATCHOS_SDK=watchsimulator3.1
+  matrix:
+    - DESTINATION="OS=3.1,name=Apple Watch - 42mm" SCHEME="$WATCHOS_FRAMEWORK_SCHEME" SDK="$WATCHOS_SDK" RUN_TESTS="NO"
+    - DESTINATION="OS=2.2,name=Apple Watch - 42mm" SCHEME="$WATCHOS_FRAMEWORK_SCHEME" SDK="$WATCHOS_SDK" RUN_TESTS="NO"
+
+    - DESTINATION="OS=10.1,name=iPhone 7 Plus"     SCHEME="$IOS_FRAMEWORK_SCHEME"     SDK="$IOS_SDK"     RUN_TESTS="YES"
+    - DESTINATION="OS=9.0,name=iPhone 6"           SCHEME="$IOS_FRAMEWORK_SCHEME"     SDK="$IOS_SDK"     RUN_TESTS="YES"
+
+    - DESTINATION="OS=10.0,name=Apple TV 1080p"    SCHEME="$TVOS_FRAMEWORK_SCHEME"    SDK="$TVOS_SDK"    RUN_TESTS="YES"
+    - DESTINATION="OS=9.0,name=Apple TV 1080p"     SCHEME="$TVOS_FRAMEWORK_SCHEME"    SDK="$TVOS_SDK"    RUN_TESTS="YES"
+
+    - DESTINATION="arch=x86_64"                    SCHEME="$MACOS_FRAMEWORK_SCHEME"   SDK="$MACOS_SDK"   RUN_TESTS="YES"
+script:
+  - set -o pipefail
+  - xcodebuild -version
+  - xcodebuild -showsdks
+
+  - if [ $RUN_TESTS == "YES" ]; then
+      travis_retry xcodebuild -project "$PROJECT" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test | xcpretty;
+    else
+      travis_retry xcodebuild -project "$PROJECT" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty;
+    fi
+
+  - if [ $RUN_TESTS == "YES" ]; then
+      travis_retry xcodebuild -project "$PROJECT" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test | xcpretty;
+    else
+      travis_retry xcodebuild -project "$PROJECT" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO build | xcpretty;
+    fi
+
