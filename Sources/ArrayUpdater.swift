@@ -44,8 +44,8 @@ extension Distinguishable {
 
 public extension Sequence where Iterator.Element == Int {
 
-    public func indexPaths(inSection: Int) -> [IndexPath] {
-        return map { IndexPath(item: $0, section: 0) }
+    public func indexPaths(inSection section: Int) -> [IndexPath] {
+        return map { IndexPath(item: $0, section: section) }
     }
 
 }
