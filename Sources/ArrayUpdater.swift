@@ -81,6 +81,38 @@ func + (lhs: Update, rhs: Update.Step) -> Update {
     return update
 }
 
+public struct ViewUpdate {
+
+    public internal(set) var insertions = [IndexPath]()
+    public internal(set) var deletions = [IndexPath]()
+    public internal(set) var reloads = [IndexPath]()
+
+    public init() {
+        self.insertions = [IndexPath]()
+        self.deletions = [IndexPath]()
+        self.reloads = [IndexPath]()
+    }
+
+    public init(update: Update, section: Int) {
+        self.insertions = update.insertions.indexPaths(inSection: section)
+        self.deletions = update.deletions.indexPaths(inSection: section)
+        self.reloads = update.reloads.indexPaths(inSection: section)
+    }
+
+    public mutating func append(update: Update, inSection section: Int) {
+        insertions += update.insertions.indexPaths(inSection: section)
+        deletions += update.deletions.indexPaths(inSection: section)
+        reloads += update.reloads.indexPaths(inSection: section)
+    }
+
+}
+
+public func += (left: inout ViewUpdate, right: ViewUpdate) {
+    left.insertions += right.insertions
+    left.deletions += right.deletions
+    left.reloads += right.reloads
+}
+
 public extension Array where Element: Distinguishable {
 
     public func update(to other: [Element]) -> Update {
