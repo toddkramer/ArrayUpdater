@@ -36,7 +36,7 @@ public protocol Distinguishable: Equatable {
 
 extension Distinguishable {
 
-    func matches(_ other: Self) -> Bool {
+    public func matches(_ other: Self) -> Bool {
         return self == other
     }
 
