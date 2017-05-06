@@ -727,7 +727,7 @@
 				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.toddkramer.ArrayUpdaterMac;
@@ -790,7 +790,7 @@
 				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.toddkramer.ArrayUpdaterMac;
 				PRODUCT_NAME = ArrayUpdater;
@@ -1420,6 +1420,7 @@
 				9B5BAA971DE91A190035C8F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9B5BAAA91DE924110035C8F7 /* Build configuration list for PBXNativeTarget "ArrayUpdaterMacTests" */ = {
 			isa = XCConfigurationList;
@@ -1428,6 +1429,7 @@
 				9B5BAAAB1DE924110035C8F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9B5BAAB91DE9248F0035C8F7 /* Build configuration list for PBXNativeTarget "ArrayUpdaterTVTests" */ = {
 			isa = XCConfigurationList;
@@ -1436,6 +1438,7 @@
 				9B5BAABB1DE9248F0035C8F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
