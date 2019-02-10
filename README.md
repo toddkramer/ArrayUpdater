@@ -21,17 +21,11 @@ ArrayUpdater is a framework for calculating the insertions, deletions, and reloa
 *Code*
 
 ```swift
-struct Park: Distinguishable {
+struct Park: Updatable {
+
     let id: String
     let name: String
 
-    func matches(_ other: Park) -> Bool {
-        return name == other.name
-    }
-}
-
-func ==(lhs: Park, rhs: Park) -> Bool {
-    return lhs.id == rhs.id
 }
 ```
 
@@ -39,7 +33,7 @@ func ==(lhs: Park, rhs: Park) -> Bool {
 
 In order for ArrayUpdater to calculate insertions and deletions, types must conform to the `Equatable` protocol. However, the framework also needs some way to know when an object or value is equal but updated in a meaningful way (reloads).
 
-ArrayUpdater provides the `Distinguishable` protocol for this, which conforms to `Equatable`. Distinguishable has one requirement, that types define what it means for two instances to "match". In the above example which models a national park, two `Park` instances are considered equal if their ids are equal, while they match if their names are equal.
+ArrayUpdater provides the `Updatable` protocol for this, which extends `Hashable` (which in turn extends `Equatable`. `Updatable` has one requirement, that types have an `id` property. Conforming types will implement `Equatable`, and the framework uses the equality check and the `id` property to determine which items in the array need to be updated in place.
 
 ### Updating Arrays
 
@@ -98,14 +92,14 @@ let reloads = update.reloads.indexPaths(inSection: 0)
 let deletions = update.deletions.indexPaths(inSection: 0)
 let insertions = update.insertions.indexPaths(inSection: 0)
 
-//Table View
+// Table View
 tableView.beginUpdates()
 tableView.reloadRows(at: reloads, with: .automatic)
 tableView.deleteRows(at: deletions, with: .automatic)
 tableView.insertRows(at: insertions, with: .automatic)
 tableView.endUpdates()
 
-//Collection View
+// Collection View
 collectionView.performBatchUpdates({ 
     self.collectionView.reloadItems(at: reloads)
     self.collectionView.deleteItems(at: deletions)
@@ -132,7 +126,7 @@ class ParksTableViewDataSource: NSObject, UITableViewDataSource {
         self.parks = parks
     }
 
-    func update(with parks: [Park]) -> Update {
+    func update(with parks: [Park]) -> IndexUpdate {
         let update = self.parks.update(to: parks)
         self.parks = parks
         return update
@@ -159,7 +153,7 @@ class ParksTableViewDataSource: NSObject, UITableViewDataSource {
 
 *Explanation*
 
-The above is an example of how you might implement a table view data source using ArrayUpdater. The key part is the "update:with" function, which returns an `Update` value containing the required reloads, deletions, and insertions. The function simply calculates the updates, replaces the underlying data, and returns the `Update` value. Then the table view can animate the updates as described in **Table & Collection Views**.
+The above is an example of how you might implement a table view data source using ArrayUpdater. The key part is the "update:with" function, which returns an `IndexUpdate` value containing the required reloads, deletions, and insertions. The function simply calculates the updates, replaces the underlying data, and returns the `IndexUpdate` value. Then the table view can animate the updates as described in **Table & Collection Views**.
 
 ## Installation
 
@@ -184,7 +178,7 @@ Manager:
         name: "MyAppTarget",
         dependencies: [
             .Package(url: "https://github.com/toddkramer/ArrayUpdater",
-                     majorVersion: 1, minor: 2)
+                     majorVersion: 1, minor: 3)
         ]
     )
     ```
@@ -208,7 +202,7 @@ install ArrayUpdater with Carthage:
  2. Add ArrayUpdater to your Cartfile:
 
     ```
-    github "toddkramer/ArrayUpdater" ~> 1.2.0
+    github "toddkramer/ArrayUpdater" ~> 1.3.0
     ```
 
  3. Run `carthage update` and [add the appropriate framework][Carthage Usage].
@@ -232,7 +226,7 @@ ArrayUpdater with CocoaPods:
     ``` ruby
     use_frameworks!
 
-    pod 'ArrayUpdater', '~> 1.2.0'
+    pod 'ArrayUpdater', '~> 1.3.0'
     ```
 
  3. Run `pod install`.

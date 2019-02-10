@@ -30,18 +30,6 @@ import Foundation
     import Cocoa
 #endif
 
-public protocol Distinguishable: Equatable {
-    func matches(_ other: Self) -> Bool
-}
-
-extension Distinguishable {
-
-    public func matches(_ other: Self) -> Bool {
-        return self == other
-    }
-
-}
-
 public extension Sequence where Iterator.Element == Int {
 
     public func indexPaths(inSection section: Int) -> [IndexPath] {
@@ -50,7 +38,8 @@ public extension Sequence where Iterator.Element == Int {
 
 }
 
-public struct Update {
+public struct IndexUpdate: Equatable {
+
     public internal(set) var insertions = [Int]()
     public internal(set) var deletions = [Int]()
     public internal(set) var reloads = [Int]()
@@ -60,15 +49,20 @@ public struct Update {
         case delete(Int)
         case reload(Int)
     }
+
+    public init(insertions: [Int] = [], deletions: [Int] = [], reloads: [Int] = []) {
+        self.insertions = insertions
+        self.deletions = deletions
+        self.reloads = reloads
+    }
+
+    public var hasChanges: Bool {
+        return !(insertions.isEmpty && deletions.isEmpty && reloads.isEmpty)
+    }
+
 }
 
-func ==(lhs: Update, rhs: Update) -> Bool {
-    return lhs.insertions == rhs.insertions &&
-        lhs.deletions == rhs.deletions &&
-        lhs.reloads == rhs.reloads
-}
-
-func + (lhs: Update, rhs: Update.Step) -> Update {
+func +(lhs: IndexUpdate, rhs: IndexUpdate.Step) -> IndexUpdate {
     var update = lhs
     switch rhs {
     case .insert(let i):
@@ -81,48 +75,56 @@ func + (lhs: Update, rhs: Update.Step) -> Update {
     return update
 }
 
-public struct ViewUpdate {
+public struct ViewUpdate: Equatable {
 
     public internal(set) var insertions = [IndexPath]()
     public internal(set) var deletions = [IndexPath]()
     public internal(set) var reloads = [IndexPath]()
 
-    public init() {
-        self.insertions = [IndexPath]()
-        self.deletions = [IndexPath]()
-        self.reloads = [IndexPath]()
+    public static var noUpdate: ViewUpdate { return .init() }
+
+    public var inverse: ViewUpdate {
+        return ViewUpdate(insertions: deletions, deletions: insertions, reloads: reloads)
     }
 
-    public init(update: Update, section: Int) {
+    public init(insertions: [IndexPath] = [], deletions: [IndexPath] = [], reloads: [IndexPath] = []) {
+        self.insertions = insertions
+        self.deletions = deletions
+        self.reloads = reloads
+    }
+
+    public init(update: IndexUpdate, section: Int) {
         self.insertions = update.insertions.indexPaths(inSection: section)
         self.deletions = update.deletions.indexPaths(inSection: section)
         self.reloads = update.reloads.indexPaths(inSection: section)
     }
 
-    public mutating func append(update: Update, inSection section: Int) {
-        insertions += update.insertions.indexPaths(inSection: section)
-        deletions += update.deletions.indexPaths(inSection: section)
-        reloads += update.reloads.indexPaths(inSection: section)
+    public mutating func append(update: IndexUpdate, inSection section: Int) {
+        let newInsertions = update.insertions.indexPaths(inSection: section)
+        let newDeletions = update.deletions.indexPaths(inSection: section)
+        let newReloads = update.reloads.indexPaths(inSection: section)
+        let newUpdate = ViewUpdate(insertions: newInsertions, deletions: newDeletions, reloads: newReloads)
+        self += newUpdate
     }
 
 }
 
 public func += (left: inout ViewUpdate, right: ViewUpdate) {
-    left.insertions += right.insertions
-    left.deletions += right.deletions
-    left.reloads += right.reloads
+    left.insertions = Array(Set(left.insertions + right.insertions)).sorted()
+    left.deletions = Array(Set(left.deletions + right.deletions)).sorted()
+    left.reloads = Array(Set(left.reloads + right.reloads)).sorted()
 }
 
-public extension Array where Element: Distinguishable {
+public extension Array where Element: Updatable {
 
-    public func update(to other: [Element]) -> Update {
+    public func update(to other: [Element]) -> IndexUpdate {
         let comparison = SequenceComparison(self, other)
         return comparison.generateUpdate(count, other.count)
     }
 
 }
 
-struct SequenceComparison<T: Distinguishable> {
+struct SequenceComparison<T: Updatable> {
 
     typealias Table = [[Int]]
 
@@ -137,7 +139,7 @@ struct SequenceComparison<T: Distinguishable> {
             for j in 0...m {
                 if (i == 0 || j == 0) {
                     table[i][j] = 0
-                } else if x[i - 1] == y[j - 1] {
+                } else if x[i - 1].id == y[j - 1].id {
                     table[i][j] = table[i - 1][j - 1] + 1
                 } else {
                     table[i][j] = max(table[i - 1][j], table[i][j - 1])
@@ -153,14 +155,14 @@ struct SequenceComparison<T: Distinguishable> {
         self.y = y
     }
 
-    func generateUpdate(_ i: Int, _ j: Int) -> Update {
+    func generateUpdate(_ i: Int, _ j: Int) -> IndexUpdate {
         if i == 0 && j == 0 {
-            return Update()
+            return IndexUpdate()
         } else if j > 0 && table[i][j] == table[i][j - 1] {
             return generateUpdate(i, j - 1) + .insert(j - 1)
         } else if i > 0 && table[i][j] == table[i - 1][j] {
             return generateUpdate(i - 1, j) + .delete(i - 1)
-        } else if !x[i - 1].matches(y[j - 1]) {
+        } else if x[i - 1] != y[j - 1] {
             return generateUpdate(i - 1, j - 1) + .reload(i - 1)
         } else {
             return generateUpdate(i - 1, j - 1)

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'ArrayUpdater'
-  s.version = '1.2.0'
+  s.version = '1.3.0'
   s.license = 'MIT'
   s.summary = 'Array update calculator in Swift'
   s.homepage = 'https://github.com/toddkramer/ArrayUpdater'
