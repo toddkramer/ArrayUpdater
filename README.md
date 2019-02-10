@@ -1,6 +1,6 @@
 # ArrayUpdater
 
-[![Build Status](https://travis-ci.org/toddkramer/ArrayUpdater.svg?branch=master)](https://travis-ci.org/toddkramer/ArrayUpdater) ![CocoaPods Version](https://cocoapod-badges.herokuapp.com/v/ArrayUpdater/badge.png) [![Swift](https://img.shields.io/badge/swift-3-orange.svg?style=flat)](https://developer.apple.com/swift/) ![Platform](https://cocoapod-badges.herokuapp.com/p/ArrayUpdater/badge.png) [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Build Status](https://travis-ci.org/toddkramer/ArrayUpdater.svg?branch=master)](https://travis-ci.org/toddkramer/ArrayUpdater) ![CocoaPods Version](https://cocoapod-badges.herokuapp.com/v/ArrayUpdater/badge.png) [![Swift](https://img.shields.io/badge/swift-4.2-orange.svg?style=flat)](https://developer.apple.com/swift/) ![Platform](https://cocoapod-badges.herokuapp.com/p/ArrayUpdater/badge.png) [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 - [Overview](#overview)
 - [Usage](#usage)
