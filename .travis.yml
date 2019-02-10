@@ -1,26 +1,14 @@
 language: objective-c
-osx_image: xcode8.1
+osx_image: xcode10.1
 env:
   global:
   - PROJECT=ArrayUpdater.xcodeproj
   - IOS_FRAMEWORK_SCHEME="ArrayUpdaterMobile"
   - MACOS_FRAMEWORK_SCHEME="ArrayUpdaterMac"
-  - TVOS_FRAMEWORK_SCHEME="ArrayUpdaterTV"
-  - WATCHOS_FRAMEWORK_SCHEME="ArrayUpdaterWatch"
-  - IOS_SDK=iphonesimulator10.1
-  - MACOS_SDK=macosx10.12
-  - TVOS_SDK=appletvsimulator10.0
-  - WATCHOS_SDK=watchsimulator3.1
+  - IOS_SDK=iphonesimulator12.1
+  - MACOS_SDK=macosx10.14
   matrix:
-    - DESTINATION="OS=3.1,name=Apple Watch - 42mm" SCHEME="$WATCHOS_FRAMEWORK_SCHEME" SDK="$WATCHOS_SDK" RUN_TESTS="NO"
-    - DESTINATION="OS=2.2,name=Apple Watch - 42mm" SCHEME="$WATCHOS_FRAMEWORK_SCHEME" SDK="$WATCHOS_SDK" RUN_TESTS="NO"
-
-    - DESTINATION="OS=10.1,name=iPhone 7 Plus"     SCHEME="$IOS_FRAMEWORK_SCHEME"     SDK="$IOS_SDK"     RUN_TESTS="YES"
-    - DESTINATION="OS=9.0,name=iPhone 6"           SCHEME="$IOS_FRAMEWORK_SCHEME"     SDK="$IOS_SDK"     RUN_TESTS="YES"
-
-    - DESTINATION="OS=10.0,name=Apple TV 1080p"    SCHEME="$TVOS_FRAMEWORK_SCHEME"    SDK="$TVOS_SDK"    RUN_TESTS="YES"
-    - DESTINATION="OS=9.0,name=Apple TV 1080p"     SCHEME="$TVOS_FRAMEWORK_SCHEME"    SDK="$TVOS_SDK"    RUN_TESTS="YES"
-
+    - DESTINATION="OS=12.1,name=iPhone 7 Plus"     SCHEME="$IOS_FRAMEWORK_SCHEME"     SDK="$IOS_SDK"     RUN_TESTS="YES"
     - DESTINATION="arch=x86_64"                    SCHEME="$MACOS_FRAMEWORK_SCHEME"   SDK="$MACOS_SDK"   RUN_TESTS="YES"
 script:
   - set -o pipefail
