@@ -32,7 +32,7 @@ import Foundation
 
 public extension Sequence where Iterator.Element == Int {
 
-    public func indexPaths(inSection section: Int) -> [IndexPath] {
+    func indexPaths(inSection section: Int) -> [IndexPath] {
         return map { IndexPath(item: $0, section: section) }
     }
 
@@ -117,7 +117,7 @@ public func += (left: inout ViewUpdate, right: ViewUpdate) {
 
 public extension Array where Element: Updatable {
 
-    public func update(to other: [Element]) -> IndexUpdate {
+    func update(to other: [Element]) -> IndexUpdate {
         let comparison = SequenceComparison(self, other)
         return comparison.generateUpdate(count, other.count)
     }

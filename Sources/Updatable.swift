@@ -30,8 +30,10 @@ public protocol Updatable: Hashable {
 
 }
 
-extension Updatable {
+public extension Updatable {
 
-    public var hashValue: Int { return id.hashValue }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 
 }
