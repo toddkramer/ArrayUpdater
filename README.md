@@ -178,7 +178,7 @@ Manager:
         name: "MyAppTarget",
         dependencies: [
             .Package(url: "https://github.com/toddkramer/ArrayUpdater",
-                     majorVersion: 1, minor: 3)
+                     majorVersion: 1, minor: 4)
         ]
     )
     ```
@@ -202,7 +202,7 @@ install ArrayUpdater with Carthage:
  2. Add ArrayUpdater to your Cartfile:
 
     ```
-    github "toddkramer/ArrayUpdater" ~> 1.3.0
+    github "toddkramer/ArrayUpdater" ~> 1.4.0
     ```
 
  3. Run `carthage update` and [add the appropriate framework][Carthage Usage].
@@ -226,7 +226,7 @@ ArrayUpdater with CocoaPods:
     ``` ruby
     use_frameworks!
 
-    pod 'ArrayUpdater', '~> 1.3.0'
+    pod 'ArrayUpdater', '~> 1.4.0'
     ```
 
  3. Run `pod install`.
