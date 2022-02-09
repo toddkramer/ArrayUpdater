@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:4.2
 //  Package.swift
 //
 //  Copyright (c) 2016 Todd Kramer (http://www.tekramer.com)
@@ -25,12 +25,6 @@ import PackageDescription
 
 let package = Package(
     name: "ArrayUpdater",
-    platforms: [
-        .iOS(.v9),
-        .tvOS(.v9),
-        .macOS(.v10_10),
-        .watchOS(.v2)
-    ],
     products: [
         .library(
             name: "ArrayUpdater",
@@ -49,9 +43,5 @@ let package = Package(
             path: "Tests",
             exclude: ["Info.plist"]
         )
-    ],
-    swiftLanguageVersions: [
-        .v4_2,
-        .v5
     ]
 )
